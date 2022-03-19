@@ -57,6 +57,8 @@ shinyApp(
                   ),
                   mainPanel(
                     plotOutput("plot1"),
+                    br(),
+                    plotOutput("plot2"),
                     paste0("Using CDC studies, I found that the probability of",
                            "infection has a strong inverse relationship to the vaccination",
                            "rate. I also found that the masked infection rate is 7.7%",
@@ -67,6 +69,14 @@ shinyApp(
                 )
   ),
   server = function(input, output) {
+    
+    param2 <- param.icm(inf.prob = 0.2, act.rate = 0.25)
+    init2 <- init.icm(s.num = 500, i.num = 1)
+    control2 <- control.icm(type = "SI", nsims = 10, nsteps = 300)
+    mod2 <- icm(param2, init2, control2)
+    output$plot2 <- renderPlot({
+      plot(mod2)
+    })
     
       output$plot1 <- renderPlot({
         reactive({
